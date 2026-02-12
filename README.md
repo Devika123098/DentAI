@@ -1,1 +1,1 @@
-# DentCare
+# DentAI
