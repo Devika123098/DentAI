@@ -1,26 +1,112 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-brand-dark: #11382f;
+    --color-brand: #1a4d40;
+    --color-brand-lime: #ccf381;
+    --color-brand-beige: #fdfbf7;
+
+    --color-background: #ffffff;
+    --color-foreground: #0f172a;
+    --color-body-text: #475569;
+
+    --color-card: #ffffff;
+    --color-card-foreground: #0f172a;
+
+    --color-popover: #ffffff;
+    --color-popover-foreground: #0f172a;
+
+    --color-primary: var(--color-brand-lime);
+    --color-primary-foreground: var(--color-brand-dark);
+
+    --color-secondary: #f8fafc;
+    --color-secondary-foreground: #475569;
+
+    --color-muted: #f1f5f9;
+    --color-muted-foreground: #64748b;
+
+    --color-accent: var(--color-brand);
+    --color-accent-foreground: #f8fafc;
+
+    --color-destructive: #dc2626;
+    --color-destructive-foreground: #ffffff;
+
+    --color-border: #e2e8f0;
+    --color-input: #e2e8f0;
+    --color-ring: var(--color-brand-lime);
+
+    --color-surface-strong: var(--color-brand-dark);
+    --color-surface-soft: #f8fafc;
+    --color-success: #16a34a;
+    --color-on-dark: #f8fafc;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+
+    --hairline-border: 0.5px solid var(--color-border);
+    --soft-shadow: 0 4px 20px -2px rgb(0 0 0 / 0.05);
+    --elevation-shadow: 0 10px 40px -4px rgb(0 0 0 / 0.08);
+    --glow-shadow: 0 0 20px rgb(204 243 129 / 0.3);
+    --glass-bg: rgb(255 255 255 / 0.8);
+    --glass-border: rgb(241 245 249 / 0.5);
+  }
+
+  .dark {
+    --color-background: #0f2f28;
+    --color-foreground: #f8fafc;
+    --color-card: #11382f;
+    --color-card-foreground: #f8fafc;
+    --color-popover: #11382f;
+    --color-popover-foreground: #f8fafc;
+    --color-border: #1f4b3f;
+    --color-muted: #1a4d40;
+    --color-muted-foreground: #cbd5e1;
+    --color-accent: var(--color-brand-lime);
+    --color-accent-foreground: var(--color-brand-dark);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-body-text);
+    font-family: var(--font-inter), sans-serif;
+  }
+
+  .font-outfit,
+  .font-geist {
+    font-family: var(--font-inter), sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .hero-grid {
+    background-size: 60px 60px;
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+  }
+
+  .hero-mask {
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  }
+
+  .glass-panel {
+    background-color: var(--glass-bg);
+    border-color: var(--glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
 }
