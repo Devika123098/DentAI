@@ -164,7 +164,7 @@ export default function Chatbot() {
             <Button
               type="submit" 
               disabled={loading || !input.trim()}
-              className="h-14 px-10 rounded-full disabled:opacity-20"
+              className="h-14 px-10 rounded-full"
             >
               <Send className="w-4 h-4" />
             </Button>

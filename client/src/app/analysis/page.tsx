@@ -104,7 +104,7 @@ export default function Analysis() {
                   )}
 
                   <Button 
-                    className="w-full h-14" 
+                    className="w-full h-14 disabled:bg-[var(--color-brand)] disabled:text-[var(--color-on-dark)] disabled:border-[var(--color-brand-dark)]/40 disabled:opacity-100" 
                     onClick={handleAnalyze} 
                     disabled={!file || loading}
                   >
