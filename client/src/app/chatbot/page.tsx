@@ -1,24 +1,30 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
+import { AnimatePresence, motion } from "framer-motion";
+import { Activity, Bot, Send, Terminal, User } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Send, Bot, User, Activity, Terminal } from "lucide-react";
-import { sendMessageMock } from '@/services/gemini-chat';
-import type { ChatMessage } from '@/types/chatbot';
-import { motion, AnimatePresence } from 'framer-motion';
+import { sendMessage } from "@/services/gemini-chat";
+import type { ChatMessage } from "@/types/chatbot";
 
 export default function Chatbot() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
-      role: 'assistant',
-      content: "Session initialized. I can help with radiology interpretation, treatment planning, and evidence-based follow-up recommendations.",
-      timestamp: new Date().toISOString()
-    }
+      role: "assistant",
+      content:
+        "Session initialized. I can help with radiology interpretation, treatment planning, and evidence-based follow-up recommendations.",
+      timestamp: new Date().toISOString(),
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -34,18 +40,18 @@ export default function Chatbot() {
 
     const userMessage: ChatMessage = {
       id: Math.random().toString(36).substring(7),
-      role: 'user',
+      role: "user",
       content: input,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     const newHistory = [...messages, userMessage];
     setMessages(newHistory);
-    setInput('');
+    setInput("");
     setLoading(true);
 
     try {
-      const response = await sendMessageMock(newHistory);
+      const response = await sendMessage(newHistory);
       setMessages([...newHistory, response]);
     } catch (error) {
       console.error("Failed to send message", error);
@@ -67,12 +73,16 @@ export default function Chatbot() {
           </motion.h1>
           <div className="flex items-center gap-2 mt-2">
             <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-success)] animate-pulse" />
-            <p className="text-xs text-[var(--color-muted-foreground)]">Connection active • Average latency 12 ms</p>
+            <p className="text-xs text-[var(--color-muted-foreground)]">
+              Connection active • Average latency 12 ms
+            </p>
           </div>
         </div>
         <div className="flex gap-4">
           <div className="px-4 py-2 border border-[var(--color-border)] bg-[var(--color-secondary)] rounded-xl">
-            <span className="text-xs font-medium text-[var(--color-foreground)]">Secure session: XA-482</span>
+            <span className="text-xs font-medium text-[var(--color-foreground)]">
+              Secure session: XA-482
+            </span>
           </div>
         </div>
       </header>
@@ -85,51 +95,72 @@ export default function Chatbot() {
                 <Bot className="w-5 h-5 text-[var(--color-primary)]" />
               </div>
               <div>
-                <h3 className="text-sm font-outfit font-semibold text-[var(--color-foreground)]">Assistant Engine</h3>
-                <p className="text-xs text-[var(--color-muted-foreground)]">Clinical model v1.5</p>
+                <h3 className="text-sm font-outfit font-semibold text-[var(--color-foreground)]">
+                  Assistant Engine
+                </h3>
+                <p className="text-xs text-[var(--color-muted-foreground)]">
+                  Clinical model v1.5
+                </p>
               </div>
             </div>
             <div className="flex gap-2">
-               {[1, 2, 3].map(i => <div key={i} className="w-1 h-3 bg-[var(--color-border)] rounded-full" />)}
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="w-1 h-3 bg-[var(--color-border)] rounded-full"
+                />
+              ))}
             </div>
           </div>
         </CardHeader>
-        
+
         <CardContent className="flex-1 p-0 overflow-hidden relative bg-[var(--color-surface-soft)]/60">
-          <div ref={scrollRef} className="h-full overflow-y-auto p-10 space-y-10 custom-scrollbar">
+          <div
+            ref={scrollRef}
+            className="h-full overflow-y-auto p-10 space-y-10 custom-scrollbar"
+          >
             <AnimatePresence initial={false}>
               {messages.map((msg) => (
-                <motion.div 
+                <motion.div
                   key={msg.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`flex gap-6 max-w-[80%] ${msg.role === 'user' ? 'ml-auto flex-row-reverse' : ''}`}
+                  className={`flex gap-6 max-w-[80%] ${msg.role === "user" ? "ml-auto flex-row-reverse" : ""}`}
                 >
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-xl border flex items-center justify-center ${msg.role === 'user' ? 'bg-[var(--color-primary)] border-[var(--color-primary)] shadow-[var(--glow-shadow)]' : 'bg-[var(--color-card)] border-[var(--color-border)]'}`}>
-                    {msg.role === 'user' ? (
+                  <div
+                    className={`flex-shrink-0 w-8 h-8 rounded-xl border flex items-center justify-center ${msg.role === "user" ? "bg-[var(--color-primary)] border-[var(--color-primary)] shadow-[var(--glow-shadow)]" : "bg-[var(--color-card)] border-[var(--color-border)]"}`}
+                  >
+                    {msg.role === "user" ? (
                       <User className="w-4 h-4 text-[var(--color-primary-foreground)]" />
                     ) : (
                       <Bot className="w-4 h-4 text-[var(--color-primary)]" />
                     )}
                   </div>
-                  <div className={`flex flex-col gap-3 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                    <div className={`px-6 py-5 rounded-2xl text-sm leading-relaxed border shadow-sm ${
-                      msg.role === 'user' 
-                        ? 'bg-[var(--color-primary)]/20 border-[var(--color-primary)]/40 text-[var(--color-foreground)]' 
-                        : 'bg-[var(--color-card)] border-[var(--color-border)] text-[var(--color-muted-foreground)]'
-                    }`}>
+                  <div
+                    className={`flex flex-col gap-3 ${msg.role === "user" ? "items-end" : "items-start"}`}
+                  >
+                    <div
+                      className={`px-6 py-5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap border shadow-sm ${
+                        msg.role === "user"
+                          ? "bg-[var(--color-primary)]/20 border-[var(--color-primary)]/40 text-[var(--color-foreground)]"
+                          : "bg-[var(--color-card)] border-[var(--color-border)] text-[var(--color-muted-foreground)]"
+                      }`}
+                    >
                       {msg.content}
                     </div>
                     <span className="text-[11px] opacity-50">
-                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      {new Date(msg.timestamp).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </span>
                   </div>
                 </motion.div>
               ))}
             </AnimatePresence>
-            
+
             {loading && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="flex gap-6"
@@ -151,9 +182,9 @@ export default function Chatbot() {
           <form onSubmit={handleSend} className="flex gap-4 w-full group">
             <div className="relative flex-1">
               <Input
-                value={input} 
+                value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about findings, diagnosis, or treatment planning..." 
+                placeholder="Ask about findings, diagnosis, or treatment planning..."
                 className="w-full h-14 rounded-full bg-[var(--color-card)] border border-[var(--color-border)] focus:border-[var(--color-primary)] px-6 py-5 text-sm outline-none transition-all placeholder:opacity-80 text-[var(--color-foreground)]"
                 disabled={loading}
               />
@@ -162,7 +193,7 @@ export default function Chatbot() {
               </div>
             </div>
             <Button
-              type="submit" 
+              type="submit"
               disabled={loading || !input.trim()}
               className="h-14 px-10 rounded-full"
             >
@@ -174,4 +205,3 @@ export default function Chatbot() {
     </div>
   );
 }
-
